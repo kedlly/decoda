@@ -233,7 +233,7 @@ int SetMessageBaseSize(int bytes)
 
 
 /// <summary>
-/// ¼ÆËãÔ­ÏûÏ¢×ªÒåºóµÄ´óĞ¡
+/// è®¡ç®—åŸæ¶ˆæ¯è½¬ä¹‰åçš„å¤§å°
 /// </summary>
 /// <param name="message"></param>
 /// <param name="msg_length"></param>
@@ -262,15 +262,15 @@ int GetEscapeMessageSize(const byte* message, int msg_length)
 #define OPTIMIZED_MEMORY_COPY
 
 /// <summary>
-/// ½«Ô­ÏûÏ¢½øĞĞ×ªÒå£¬²¢½«Êı¾İĞ´Èë"ÍøÂçÊı¾İ»º´æ" ÖĞ
-/// µ±buffer Îª nullptrÊ±£¬·µ»Ø¹¹½¨×ªÒåĞòÁĞËùĞèµÄ»º´æ³¤¶È
-/// ·µ»ØÖµĞ¡ÓÚ0±íÊ¾»º´æÇøbuffer ³¤¶È²»¹», Æä¾ø¶ÔÖµÎªÆÚÍû³¤¶È
+/// å°†åŸæ¶ˆæ¯è¿›è¡Œè½¬ä¹‰ï¼Œå¹¶å°†æ•°æ®å†™å…¥"ç½‘ç»œæ•°æ®ç¼“å­˜" ä¸­
+/// å½“buffer ä¸º nullptræ—¶ï¼Œè¿”å›æ„å»ºè½¬ä¹‰åºåˆ—æ‰€éœ€çš„ç¼“å­˜é•¿åº¦
+/// è¿”å›å€¼å°äº0è¡¨ç¤ºç¼“å­˜åŒºbuffer é•¿åº¦ä¸å¤Ÿ, å…¶ç»å¯¹å€¼ä¸ºæœŸæœ›é•¿åº¦
 /// </summary>
-/// <param name="message">Ô­Ê¼ÏûÏ¢</param>
-/// <param name="msg_length">Ô­Ê¼ÏûÏ¢³¤¶È</param>
-/// <param name="buffer">×ªÒåÏûÏ¢»º´æ</param>
-/// <param name="buffer_size">×ªÒåÏûÏ¢»º´æ³¤¶È</param>
-/// <returns>×ªÒåÏûÏ¢ÔÚbufferÖĞµÄÊµ¼Ê³¤¶È</returns>
+/// <param name="message">åŸå§‹æ¶ˆæ¯</param>
+/// <param name="msg_length">åŸå§‹æ¶ˆæ¯é•¿åº¦</param>
+/// <param name="buffer">è½¬ä¹‰æ¶ˆæ¯ç¼“å­˜</param>
+/// <param name="buffer_size">è½¬ä¹‰æ¶ˆæ¯ç¼“å­˜é•¿åº¦</param>
+/// <returns>è½¬ä¹‰æ¶ˆæ¯åœ¨bufferä¸­çš„å®é™…é•¿åº¦</returns>
 int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_size)
 {
 	int escape_msg_length = GetEscapeMessageSize(message, msg_length);
@@ -399,7 +399,7 @@ int InvertEscapeMessage(const byte* emsg, int emsg_length, byte* buffer, int buf
 	{
 
 		int msg_len = GetOriginalMessageSize(emsg, emsg_length);
-		if (msg_len <= 0) // °üº¬·Ç·¨µÄ×ªÒå
+		if (msg_len <= 0) // åŒ…å«éæ³•çš„è½¬ä¹‰
 		{
 			errorCode = EC_ILLEGAL_FRAME;
 			if (extData != nullptr)
