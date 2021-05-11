@@ -264,8 +264,8 @@ int GetEscapeMessageSize(const byte* message, int msg_length)
 
 #ifdef OPTIMIZED_MEMORY_COPY
 
-#if defined MEMCPY
-#error MEMCPY id alread defined
+#if defined _MEMCPY
+#error _MEMCPY id alread defined
 #endif
 
 #if _MSVC_
