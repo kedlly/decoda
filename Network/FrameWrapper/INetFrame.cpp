@@ -81,7 +81,7 @@ int Build(const byte* message, int msg_length, byte* buffer, int buffer_size)
 			byte* content = buffer;
 			content[0] = FRAME_MARK;
 			content += 1; //sizeof(HEAD)
-			byte* escape_msg_begin = content;
+			//byte* escape_msg_begin = content;
 			int emsg_len = EscapeMessage(message, msg_length, content, escape_msg_length);
 			assert(emsg_len == escape_msg_length);
 			content += emsg_len;
@@ -90,7 +90,7 @@ int Build(const byte* message, int msg_length, byte* buffer, int buffer_size)
 			content += escape_cks_len;
 			content[0] = FRAME_MARK;
 			content += 1;
-			ret = content - buffer;
+			ret = int(content - buffer);
 		}
 	}
 	return ret;
@@ -261,6 +261,22 @@ int GetEscapeMessageSize(const byte* message, int msg_length)
 
 #define OPTIMIZED_MEMORY_COPY
 
+
+#ifdef OPTIMIZED_MEMORY_COPY
+
+#if defined MEMCPY
+#error MEMCPY id alread defined
+#endif
+
+#if _MSVC_
+#define _MEMCPY(d, len_d, s, len_s) memcpy_s(d, len_d, s, _lens)
+#else
+#define _MEMCPY(d, len_d, s, len_s) memcpy(d, s, len_s)
+#endif
+
+
+#endif
+
 /// <summary>
 /// 将原消息进行转义，并将数据写入"网络数据缓存" 中
 /// 当buffer 为 nullptr时，返回构建转义序列所需的缓存长度
@@ -289,7 +305,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 				if (message[endIndex] == FRAME_MARK)
 				{
 					copy_size = endIndex - startIndex;
-					memcpy_s(content, content_size, message + startIndex, copy_size);
+                    _MEMCPY(content, content_size, message + startIndex, copy_size);
 					content_size -= copy_size;
 					content += copy_size;
 					content[0] = FRAME_ESCAPE;
@@ -300,7 +316,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 				else if (message[endIndex] == FRAME_ESCAPE)
 				{
 					copy_size = endIndex - startIndex;
-					memcpy_s(content, content_size, message + startIndex, copy_size);
+                    _MEMCPY(content, content_size, message + startIndex, copy_size);
 					content_size -= copy_size;
 					content += copy_size;
 					content[0] = FRAME_ESCAPE;
@@ -335,7 +351,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 			copy_size = endIndex - startIndex;
 			if (copy_size > 0)
 			{
-				memcpy_s(content, content_size, message + startIndex, copy_size);
+                _MEMCPY(content, content_size, message + startIndex, copy_size);
 				content_size -= copy_size;
 			}
 #endif
@@ -474,7 +490,7 @@ int InvertEscapeMessage(const byte* emsg, int emsg_length, byte* buffer, int buf
 					if (emsg[endIndex] == FRAME_ESCAPE)
 					{
 						content_size = endIndex - beginIndex;
-						memcpy_s(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
+                        _MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
 						buffer_write_index += content_size;
 						int esc_id_index = endIndex + 1;
 						if (esc_id_index < emsg_length)
@@ -511,7 +527,7 @@ int InvertEscapeMessage(const byte* emsg, int emsg_length, byte* buffer, int buf
 					content_size = endIndex - beginIndex;
 					if (content_size > 0)
 					{
-						memcpy_s(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
+                        _MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
 					}
 #endif
 					if (extData != nullptr)
