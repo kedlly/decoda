@@ -305,7 +305,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 				if (message[endIndex] == FRAME_MARK)
 				{
 					copy_size = endIndex - startIndex;
-                    _MEMCPY(content, content_size, message + startIndex, copy_size);
+					_MEMCPY(content, content_size, message + startIndex, copy_size);
 					content_size -= copy_size;
 					content += copy_size;
 					content[0] = FRAME_ESCAPE;
@@ -316,7 +316,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 				else if (message[endIndex] == FRAME_ESCAPE)
 				{
 					copy_size = endIndex - startIndex;
-                    _MEMCPY(content, content_size, message + startIndex, copy_size);
+					_MEMCPY(content, content_size, message + startIndex, copy_size);
 					content_size -= copy_size;
 					content += copy_size;
 					content[0] = FRAME_ESCAPE;
@@ -351,7 +351,7 @@ int EscapeMessage(const byte* message, int msg_length, byte* buffer, int buffer_
 			copy_size = endIndex - startIndex;
 			if (copy_size > 0)
 			{
-                _MEMCPY(content, content_size, message + startIndex, copy_size);
+				_MEMCPY(content, content_size, message + startIndex, copy_size);
 				content_size -= copy_size;
 			}
 #endif
@@ -490,7 +490,7 @@ int InvertEscapeMessage(const byte* emsg, int emsg_length, byte* buffer, int buf
 					if (emsg[endIndex] == FRAME_ESCAPE)
 					{
 						content_size = endIndex - beginIndex;
-                        _MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
+						_MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
 						buffer_write_index += content_size;
 						int esc_id_index = endIndex + 1;
 						if (esc_id_index < emsg_length)
@@ -527,7 +527,7 @@ int InvertEscapeMessage(const byte* emsg, int emsg_length, byte* buffer, int buf
 					content_size = endIndex - beginIndex;
 					if (content_size > 0)
 					{
-                        _MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
+						_MEMCPY(buffer + buffer_write_index, content_size, emsg + beginIndex, content_size);
 					}
 #endif
 					if (extData != nullptr)
